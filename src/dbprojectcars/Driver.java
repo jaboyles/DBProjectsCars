@@ -1,3 +1,4 @@
+package dbprojectcars;
 
 import java.util.*;
 import java.text.*;
@@ -27,7 +28,7 @@ public class Driver {
     static final int numdxcvars = 3;
     static final int numcxcvars = 2;
     static final int numempvars = 4;
-    static final int numsalvars = 5;
+    static final int numsalvars = 4;
 
     public static void main(String[] args) {
         connectDB();
@@ -163,10 +164,10 @@ public class Driver {
         ArrayList<String> args = getArgs();
         execInsert(Customers, args);
     }
-    
+
     public static void addSale() {
-    	System.out.println("Enter Information exactly in the following format:");
-    	System.out.println("<Employee ID> / <VIN> / <Sell Price> / <Date>");
+        System.out.println("Enter Information exactly in the following format:");
+        System.out.println("<Employee ID> / <VIN> / <Sell Price> / <Date>");
         ArrayList<String> args = getArgs();
         execInsert(Sales, args);
     }
@@ -178,20 +179,21 @@ public class Driver {
         execInsert(Models, args);
     }
 
-	public static void sell() {
-		System.out.println("Enter Information exactly in the following format:");
+    public static void sell() {
+        /* 1 / 57 / 1000 / 2017-09-08 / 1 */ 
+        System.out.println("Enter Information exactly in the following format:");
         System.out.println("<Employee ID> / <VIN of Vehcile Sold> / <Sale Amount> / <Date of Sale> / <Customer ID>");
-		ArrayList<String> args = getArgs();
-		execInsert(Sales, args);
-		try {
-			dbstate.executeUpdate(String.format("DELETE FROM DealershipXCar WHERE vin=%d;", args.get(1)));
-			dbstate.executeUpdate(String.format("INSERT INTO CustomerXCar (cid, vin) VALUES (%d, %d);", args.get(5), args.get(1)));
-			dbstate.executeUpdate(String.format("UPDATE Cars SET value=value/1.1 WHERE vin=%d;", args.get(1)));
-		}
-		catch (Exception e) {
-			System.out.println("Error in sell method!!");
-		}
-	}
+        ArrayList<String> args = getArgs();
+        execInsert(Sales, args);
+        try {
+            dbstate.executeUpdate(String.format("DELETE FROM DealershipXCar WHERE vin=%s;", args.get(1)));
+            dbstate.executeUpdate(String.format("INSERT INTO CustomerXCar (cid, vin) VALUES (%s, %s);", args.get(4), args.get(1)));
+            dbstate.executeUpdate(String.format("UPDATE Cars SET value=value*0.9 WHERE vin=%s;", args.get(1)));
+        } catch (Exception e) {
+            System.out.println("Error in sell method!!");
+            e.printStackTrace();
+        }
+    }
 
     public static void execQuery() {
         String querystr;
@@ -245,21 +247,18 @@ public class Driver {
 
         for (i = 0; i < maxarr; i++) {
             boolean isString = false;
-			try {
-				Double.parseDouble(values.get(i));
-			}
-			catch (NumberFormatException e) {
-				isString = true;
-			}
+            try {
+                Double.parseDouble(values.get(i));
+            } catch (NumberFormatException e) {
+                isString = true;
+            }
 
+            if (isString == true) {
+                insertstr = insertstr + "'" + values.get(i) + "'";
+            } else {
+                insertstr += values.get(i);
+            }
 
-			if (isString == true) {
-				insertstr = insertstr + "'" + values.get(i) + "'";
-			}
-			else {
-				insertstr += values.get(i);
-			}
-            
             if (i != maxarr - 1) {
                 insertstr += ", ";
             }
@@ -281,7 +280,7 @@ public class Driver {
     public static void connectDB() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            mycon =DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/ProjectDB?user=root&password=iateapoundofchocolate");
+            mycon = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/ProjectDB?user=root&password=iateapoundofchocolate");
             dbstate = mycon.createStatement();
             dbrs = dbstate.executeQuery("SHOW TABLES");
             while (dbrs.next()) {
