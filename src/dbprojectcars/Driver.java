@@ -230,7 +230,7 @@ public class Driver {
 
         for (i = 0; i < maxarr; i++) {
 
-            insertstr += values.get(i);
+            insertstr += values.get(i); 
 
             if (i != maxarr - 1) {
                 insertstr += ", ";
