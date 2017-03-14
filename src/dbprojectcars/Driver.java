@@ -22,12 +22,12 @@ public class Driver {
     static final int numcompvars = 1;
     static final int numdealvars = 2;
     static final int nummodvars = 4;
-    static final int numcarvars = 9;
-    static final int numcustvars = 4;
+    static final int numcarvars = 6;
+    static final int numcustvars = 3;
     static final int numdxcvars = 3;
     static final int numcxcvars = 2;
-    static final int numempvars = 5;
-    static final int numsalvars = 3;
+    static final int numempvars = 4;
+    static final int numsalvars = 5;
 
     public static void main(String[] args) {
         connectDB();
@@ -57,7 +57,7 @@ public class Driver {
                     addCustomer();
                     break;
                 case 6:
-                    //sell();
+                    sell();
                     break;
                 case 7:
                     //buy();
@@ -152,7 +152,7 @@ public class Driver {
 
     public static void addEmployee() {
         System.out.println("Enter Information exactly in the following format:");
-        System.out.println("<Name> / <Dealership Branch> / <Position>");
+        System.out.println("<Name> / <Dealership Company> /<Dealership Location> / <Position>");
         ArrayList<String> args = getArgs();
         execInsert(Employees, args);
     }
@@ -177,6 +177,21 @@ public class Driver {
         ArrayList<String> args = getArgs();
         execInsert(Models, args);
     }
+
+	public static void sell() {
+		System.out.println("Enter Information exactly in the following format:");
+        System.out.println("<Employee ID> / <VIN of Vehcile Sold> / <Sale Amount> / <Date of Sale> / <Customer ID>");
+		ArrayList<String> args = getArgs();
+		execInsert(Sales, args);
+		try {
+			dbstate.executeUpdate(String.format("DELETE FROM DealershipXCar WHERE vin=%d;", args.get(1)));
+			dbstate.executeUpdate(String.format("INSERT INTO CustomerXCar (cid, vin) VALUES (%d, %d);", args.get(5), args.get(1)));
+			dbstate.executeUpdate(String.format("UPDATE Cars SET value=value/1.1 WHERE vin=%d;", args.get(1)));
+		}
+		catch (Exception e) {
+			System.out.println("Error in sell method!!");
+		}
+	}
 
     public static void execQuery() {
         String querystr;
@@ -252,7 +267,7 @@ public class Driver {
 
         insertstr += ");";
 
-        System.out.println(insertstr);
+        //System.out.println(insertstr);
         try {
             dbstate.executeUpdate(insertstr);
             dbstate = mycon.createStatement();
@@ -260,15 +275,6 @@ public class Driver {
             System.out.println("Error in insertion");
             e.printStackTrace();
         }
-
-    }
-
-    public static void execUpdate() {
-        String updatestr;
-    }
-
-    public static void execDelete(int table, ArrayList<String> values) {
-        String deletestr;
 
     }
 
