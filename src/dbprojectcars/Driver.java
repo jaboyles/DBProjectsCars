@@ -163,6 +163,13 @@ public class Driver {
         ArrayList<String> args = getArgs();
         execInsert(Customers, args);
     }
+    
+    public static void addSale() {
+    	System.out.println("Enter Information exactly in the following format:");
+    	System.out.println("<Employee ID> / <VIN> / <Sell Price> / <Date>");
+        ArrayList<String> args = getArgs();
+        execInsert(Sales, args);
+    }
 
     public static void addModel() {
         System.out.println("Enter Information exactly in the following format:");
