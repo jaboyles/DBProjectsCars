@@ -262,7 +262,7 @@ public class Driver {
     public static void connectDB() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            mycon = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/ProjectDB?user=root&password=iateapoundofchocolate");
+            mycon =DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/ProjectDB?user=root&password=iateapoundofchocolate");
             dbstate = mycon.createStatement();
             dbrs = dbstate.executeQuery("SHOW TABLES");
             while (dbrs.next()) {
