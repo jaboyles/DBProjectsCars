@@ -229,9 +229,22 @@ public class Driver {
         }
 
         for (i = 0; i < maxarr; i++) {
+            boolean isString = false;
+			try {
+				Double.parseDouble(values.get(i));
+			}
+			catch (NumberFormatException e) {
+				isString = true;
+			}
 
-            insertstr += values.get(i); 
 
+			if (isString == true) {
+				insertstr = insertstr + "'" + values.get(i) + "'";
+			}
+			else {
+				insertstr += values.get(i);
+			}
+            
             if (i != maxarr - 1) {
                 insertstr += ", ";
             }
