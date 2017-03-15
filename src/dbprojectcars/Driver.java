@@ -442,18 +442,19 @@ public class Driver {
         System.out.println("<Customer ID> / <Manufacturer> / <Branch>");
         ArrayList<String> args = getArgs();
 		try {
-			ResultSet rs = dbstate.executeQuery(String.format("SELECT vin, year, make, model, color, isNew, price FROM DealershipXCar D, Cars C, Customers P WHERE P.id=%s AND D.city=%s AND D.company=%s AND P.budget >= C.value AND C.vin=D.vin", args.get(0), args.get(2), args.get(1)));
+			ResultSet rs = dbstate.executeQuery(String.format("SELECT C.vin, year(C.year), C.make, C.model, C.color, C.isNew, C.value FROM DealershipXCar D, Cars C, Customers P WHERE P.id=%s AND D.city='%s' AND D.company='%s' AND P.budget >= C.value AND C.vin=D.vin", args.get(0), args.get(2), args.get(1)));
 			ResultSetMetaData md = rs.getMetaData();
 			int columns = md.getColumnCount();
     	 	while (rs.next()) {
-				for (int i = 0; i < columns; i++) {
-					System.out.println(rs.getString(i) + " ");
+				for (int i = 1; i < columns + 1; i++) {
+					System.out.print(rs.getString(i) + " ");
 				}
 				System.out.println();
         	}
 		}
 		catch(Exception e) {
 			System.out.println("Error finding affordable cars!");
+                        e.printStackTrace();
 		}
 	}
 
