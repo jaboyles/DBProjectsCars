@@ -179,7 +179,7 @@ public class Driver {
                 System.out.println(name);
             }
         } catch (Exception e) {
-            System.out.println("Error in getByEmpID");
+            System.out.println("Error in getByVIN");
             e.printStackTrace();
         }
     }
@@ -199,18 +199,54 @@ public class Driver {
                 System.out.println(name);
             }
         } catch (Exception e) {
-            System.out.println("Error in getByEmpID");
+            System.out.println("Error in getByDate");
             e.printStackTrace();
         }
     }
     
     public static void getByDealership() {
         Scanner scan = new Scanner(System.in);
-        String company, city;
+        String company, city, myq;
         System.out.println("Please enter the name of the dealership's company: ");
         company = scan.nextLine();
         System.out.println("Please enter the name of the dealership's city: ");
         city = scan.nextLine();
+        
+        try {
+            myq = "SELECT S.* FROM Sales S, Employees E WHERE S.emplid = E.id AND E.company = '" 
+                    + company + "' AND E.city = '" + city + "'";
+            dbstate = mycon.createStatement();
+            dbrs = dbstate.executeQuery(myq);
+            //System.out.println(myq);
+            while (dbrs.next()) {
+                String name = dbrs.getString(1);
+                System.out.println(name);
+            }
+        } catch (Exception e) {
+            System.out.println("Error in getByDealership");
+            e.printStackTrace();
+        }
+    }
+    
+    public static void getByCompany() {
+        Scanner scan = new Scanner(System.in);
+        String company, myq;
+        System.out.println("Please enter the name of the company: ");
+        company = scan.nextLine();   
+        try {
+            myq = "SELECT S.* FROM Sales S, Employees E WHERE S.emplid = E.id AND E.company = '" 
+                    + company + "'";
+            dbstate = mycon.createStatement();
+            dbrs = dbstate.executeQuery(myq);
+            //System.out.println(myq);
+            while (dbrs.next()) {
+                String name = dbrs.getString(1);
+                System.out.println(name);
+            }
+        } catch (Exception e) {
+            System.out.println("Error in getByCompany");
+            e.printStackTrace();
+        }
     }
 
     public static void getSales() {
@@ -229,10 +265,10 @@ public class Driver {
                 getByDate();
                 return;
             case 4:
-                //get by dealership
+                getByDealership();
                 return;
             case 5:
-                //get by manufacturer
+                getByCompany();
                 return;
             case 6:
                 return;
@@ -249,7 +285,7 @@ public class Driver {
         System.out.println("=         2. Search for sales by Vehicle VIN       =");
         System.out.println("=         3. Search for sales by Sale Date         =");
         System.out.println("=         4. Search for sales by Dealership        =");
-        System.out.println("=         5. Search for sales by Manufacturerer    =");
+        System.out.println("=         5. Search for sales by Company           =");
         System.out.println("=         6. Back to main menu                     =");
         System.out.println("====================================================");
     }
