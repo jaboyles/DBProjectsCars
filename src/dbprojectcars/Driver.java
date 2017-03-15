@@ -203,7 +203,7 @@ public class Driver {
             e.printStackTrace();
         }
     }
-    
+
     public static void getByDealership() {
         Scanner scan = new Scanner(System.in);
         String company, city, myq;
@@ -211,9 +211,9 @@ public class Driver {
         company = scan.nextLine();
         System.out.println("Please enter the name of the dealership's city: ");
         city = scan.nextLine();
-        
+
         try {
-            myq = "SELECT S.* FROM Sales S, Employees E WHERE S.emplid = E.id AND E.company = '" 
+            myq = "SELECT S.* FROM Sales S, Employees E WHERE S.emplid = E.id AND E.company = '"
                     + company + "' AND E.city = '" + city + "'";
             dbstate = mycon.createStatement();
             dbrs = dbstate.executeQuery(myq);
@@ -227,14 +227,14 @@ public class Driver {
             e.printStackTrace();
         }
     }
-    
+
     public static void getByCompany() {
         Scanner scan = new Scanner(System.in);
         String company, myq;
         System.out.println("Please enter the name of the company: ");
-        company = scan.nextLine();   
+        company = scan.nextLine();
         try {
-            myq = "SELECT S.* FROM Sales S, Employees E WHERE S.emplid = E.id AND E.company = '" 
+            myq = "SELECT S.* FROM Sales S, Employees E WHERE S.emplid = E.id AND E.company = '"
                     + company + "'";
             dbstate = mycon.createStatement();
             dbrs = dbstate.executeQuery(myq);
@@ -249,7 +249,103 @@ public class Driver {
         }
     }
 
-	public static void findEmployees() {
+    public static void findByID() {
+        Scanner scan = new Scanner(System.in);
+        int empid;
+        System.out.println("Please enter the ID of the Employee you would like to find:");
+        empid = scan.nextInt();
+        try {
+            dbstate = mycon.createStatement();
+            dbrs = dbstate.executeQuery("SELECT * FROM Employees WHERE id = " + empid);
+            //System.out.println(myq);
+            while (dbrs.next()) {
+                String name = dbrs.getString(1);
+                System.out.println(name);
+            }
+        } catch (Exception e) {
+            System.out.println("Error in findByID");
+            e.printStackTrace();
+        }
+    }
+
+    public static void findByName() {
+        Scanner scan = new Scanner(System.in);
+        String ename;
+        System.out.println("Please enter the name of the Employee you would like to find:");
+        ename = scan.nextLine();
+        try {
+            dbstate = mycon.createStatement();
+            dbrs = dbstate.executeQuery("SELECT * FROM Employees WHERE name = '" + ename + "'");
+            //System.out.println(myq);
+            while (dbrs.next()) {
+                String name = dbrs.getString(1);
+                System.out.println(name);
+            }
+        } catch (Exception e) {
+            System.out.println("Error in findByName");
+            e.printStackTrace();
+        }
+    }
+
+    public static void findByDealership() {
+        System.out.println("Please enter the Company and City of the dealership in the following format:");
+        System.out.println("<Company> / <City>");
+        ArrayList<String> args = getArgs();
+        try {
+            dbstate = mycon.createStatement();
+            dbrs = dbstate.executeQuery("SELECT * FROM Employees WHERE company = '"
+                    + args.get(0) + "' AND city = '" + args.get(1) + "'");
+            //System.out.println(myq);
+            while (dbrs.next()) {
+                String name = dbrs.getString(1);
+                System.out.println(name);
+            }
+        } catch (Exception e) {
+            System.out.println("Error in findByDealership");
+            e.printStackTrace();
+        }
+    }
+
+    public static void findByPosition() {
+        System.out.println("Please enter the Company, City, and Position of the employee in the following format:");
+        System.out.println("<Company> / <City> / <Position>");
+        ArrayList<String> args = getArgs();
+        try {
+            dbstate = mycon.createStatement();
+            dbrs = dbstate.executeQuery("SELECT * FROM Employees WHERE company = '"
+                    + args.get(0) + "' AND city = '" + args.get(1) + "' AND position = '" + args.get(2) + "'");
+            //System.out.println(myq);
+            while (dbrs.next()) {
+                String name = dbrs.getString(1);
+                System.out.println(name);
+            }
+        } catch (Exception e) {
+            System.out.println("Error in findByPosition");
+            e.printStackTrace();
+        }
+    }
+
+    public static void findBySale() {
+        System.out.println("Please enter the VIN and Date of the sale in the following format:");
+        System.out.println("<VIN> / <Date>");
+        System.out.println("Date format: YYYY-MM-DD");
+        ArrayList<String> args = getArgs();
+        try {
+            dbstate = mycon.createStatement();
+            dbrs = dbstate.executeQuery("SELECT E.* FROM Employees E, Sales S WHERE E.id = S.emplid AND S.vin = "
+                    + args.get(0) + " AND S.date = '" + args.get(1) + "'");
+            //System.out.println(myq);
+            while (dbrs.next()) {
+                String name = dbrs.getString(1);
+                System.out.println(name);
+            }
+        } catch (Exception e) {
+            System.out.println("Error in findBySale");
+            e.printStackTrace();
+        }
+    }
+
+    public static void findEmployees() {
         printFindMenu();
         Scanner scan = new Scanner(System.in);
         while (scan.hasNextLine()) {
@@ -259,16 +355,16 @@ public class Driver {
             } catch (java.util.InputMismatchException e) {
                 scan.next();
             }
-        	switch (selection) {
-            	case 1:
-					//option1
-          			break;
-            	default:
-					System.out.println();
-                	System.out.println("Invalid Entry...Try Again!");
-					break;
-			}
-			printFindMenu();
+            switch (selection) {
+                case 1:
+                    //option1
+                    break;
+                default:
+                    System.out.println();
+                    System.out.println("Invalid Entry...Try Again!");
+                    break;
+            }
+            printFindMenu();
         }
     }
 
@@ -312,7 +408,7 @@ public class Driver {
         System.out.println("====================================================");
     }
 
-	public static void printFindMenu() {
+    public static void printFindMenu() {
         System.out.println();
         System.out.println("EMPLOYEE FINDING MENU: Select Option...");
         System.out.println("====================================================");
@@ -376,7 +472,7 @@ public class Driver {
     }
 
     public static void sell() {
-        /* 1 / 57 / 1000 / 2017-09-08 / 1 */ 
+        /* 1 / 57 / 1000 / 2017-09-08 / 1 */
         System.out.println("Enter Information exactly in the following format:");
         System.out.println("<Employee ID> / <VIN of Vehcile Sold> / <Sale Amount> / <Date of Sale> / <Customer ID>");
         ArrayList<String> args = getArgs();
@@ -390,22 +486,20 @@ public class Driver {
             e.printStackTrace();
         }
     }
-    
+
     public static void buy() {
-		System.out.println("Enter Information exactly in the following format:");
+        System.out.println("Enter Information exactly in the following format:");
         System.out.println("<Employee ID> / <VIN of Vehcile Sold> / <Sale Amount> / <Date of Sale> / <Customer ID>");
-		ArrayList<String> args = getArgs();
-		execInsert(Sales, args);
-		try {
-			dbstate.executeUpdate(String.format("INSERT INTO DealershipXCar WHERE vin=%s;", args.get(1)));
-			dbstate.executeUpdate(String.format("DELETE FROM CustomerXCar (cid, vin) VALUES (%s, %s);", args.get(4), args.get(1)));
-			dbstate.executeUpdate(String.format("UPDATE Cars SET value=value*1.1 WHERE vin=%d;", args.get(1)));
-		}
-		catch (Exception e) {
-			System.out.println("Error in buy method!!");
-		}
-	}
-	
+        ArrayList<String> args = getArgs();
+        execInsert(Sales, args);
+        try {
+            dbstate.executeUpdate(String.format("INSERT INTO DealershipXCar WHERE vin=%s;", args.get(1)));
+            dbstate.executeUpdate(String.format("DELETE FROM CustomerXCar (cid, vin) VALUES (%s, %s);", args.get(4), args.get(1)));
+            dbstate.executeUpdate(String.format("UPDATE Cars SET value=value*1.1 WHERE vin=%d;", args.get(1)));
+        } catch (Exception e) {
+            System.out.println("Error in buy method!!");
+        }
+    }
 
     public static void execQuery() {
         String querystr;
