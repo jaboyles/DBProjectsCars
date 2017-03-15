@@ -205,7 +205,7 @@ public class Driver {
     }
 
     public static void getByDealership() {
-		System.out.println("Enter Information exactly in the following format:");
+        System.out.println("Enter Information exactly in the following format:");
         System.out.println("<Manufacturer> / <Location>");
         ArrayList<String> args = getArgs();
         
@@ -357,8 +357,22 @@ public class Driver {
             }
             switch (selection) {
                 case 1:
-                    //option1
-                    break;
+                    findByID();
+                    return;
+                case 2:
+                    findByName();
+                    return;
+                case 3:
+                    findByDealership();
+                    return;
+                case 4:
+                    findBySale();
+                    return;
+                case 5:
+                    findByPosition();
+                    return;
+                case 6:
+                    return;
                 default:
                     System.out.println();
                     System.out.println("Invalid Entry...Try Again!");
