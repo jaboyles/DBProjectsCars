@@ -577,7 +577,7 @@ public class Driver {
                 maxarr = numcarvars;
                 break;
             case Customers:
-                insertstr = "INSERT INTO Customers VALUES (";
+                insertstr = "INSERT INTO Customers(name, budget, city) VALUES (";
                 maxarr = numcustvars;
                 break;
             case DealershipXCar:
@@ -627,8 +627,16 @@ public class Driver {
             dbstate.executeUpdate(insertstr);
             dbstate = mycon.createStatement();
         } catch (Exception e) {
-            System.out.println("Error in insertion");
-            e.printStackTrace();
+            if (table == Sales)
+            {
+                System.out.println("The customer either does not have enough money or is in the wrong location to purchase the car");
+            }
+            else
+            {
+                System.out.println("Error in insertion");
+            }
+            
+            //e.printStackTrace();
         }
 
     }
