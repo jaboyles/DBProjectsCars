@@ -194,6 +194,22 @@ public class Driver {
             e.printStackTrace();
         }
     }
+    
+    public static void buy() {
+		System.out.println("Enter Information exactly in the following format:");
+        System.out.println("<Employee ID> / <VIN of Vehcile Sold> / <Sale Amount> / <Date of Sale> / <Customer ID>");
+		ArrayList<String> args = getArgs();
+		execInsert(Sales, args);
+		try {
+			dbstate.executeUpdate(String.format("INSERT INTO DealershipXCar WHERE vin=%s;", args.get(1)));
+			dbstate.executeUpdate(String.format("DELETE FROM CustomerXCar (cid, vin) VALUES (%s, %s);", args.get(4), args.get(1)));
+			dbstate.executeUpdate(String.format("UPDATE Cars SET value=value*1.1 WHERE vin=%d;", args.get(1)));
+		}
+		catch (Exception e) {
+			System.out.println("Error in buy method!!");
+		}
+	}
+	
 
     public static void execQuery() {
         String querystr;
