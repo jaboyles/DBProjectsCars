@@ -503,13 +503,13 @@ public class Driver {
 
     public static void buy() {
         System.out.println("Enter Information exactly in the following format:");
-        System.out.println("<Employee ID> / <VIN of Vehcile Sold> / <Sale Amount> / <Date of Sale> / <Customer ID>");
+        System.out.println("<Dealership Manufacturer> / <Dealership City> / <VIN of the Car> / <Date of Sale> / <Customer ID>");
         ArrayList<String> args = getArgs();
-        execInsert(Sales, args);
+        
         try {
-            dbstate.executeUpdate(String.format("INSERT INTO DealershipXCar WHERE vin=%s;", args.get(1)));
-            dbstate.executeUpdate(String.format("DELETE FROM CustomerXCar (cid, vin) VALUES (%s, %s);", args.get(4), args.get(1)));
-            dbstate.executeUpdate(String.format("UPDATE Cars SET value=value*1.1 WHERE vin=%d;", args.get(1)));
+            dbstate.executeUpdate(String.format("DELETE FROM CustomerXCar (cid, vin) VALUES (%s, %s);", args.get(4), args.get(2)));
+            dbstate.executeUpdate(String.format("INSERT INTO DealershipXCar VALUES (%s, %s, %s);", args.get(0), args.get(1), args.get(2)));
+            dbstate.executeUpdate(String.format("UPDATE Cars SET isSold=False WHERE vin=%s;", args.get(2)));
         } catch (Exception e) {
             System.out.println("Error in buy method!!");
         }
