@@ -72,9 +72,9 @@ public class Driver {
                 case 10:
                     findEmployees();
                     break;
-				case 11:
-					getCarList();
-					break;
+                case 11:
+                    getCarList();
+                    break;
                 case 12:
                     System.exit(0);
                     break;
@@ -212,9 +212,9 @@ public class Driver {
         System.out.println("Enter Information exactly in the following format:");
         System.out.println("<Manufacturer> / <Location>");
         ArrayList<String> args = getArgs();
-        
+
         try {
-            String myq = "SELECT S.* FROM Sales S, Employees E WHERE S.emplid = E.id AND E.company = '" 
+            String myq = "SELECT S.* FROM Sales S, Employees E WHERE S.emplid = E.id AND E.company = '"
                     + args.get(0) + "' AND E.city = '" + args.get(1) + "'";
             dbstate = mycon.createStatement();
             dbrs = dbstate.executeQuery(myq);
@@ -325,7 +325,7 @@ public class Driver {
             e.printStackTrace();
         }
     }
- 
+
     public static void findBySale() {
         System.out.println("Please enter the VIN and Date of the sale in the following format:");
         System.out.println("<VIN> / <Date>");
@@ -437,26 +437,33 @@ public class Driver {
         System.out.println("====================================================");
     }
 
-	public static void getCarList() {
-		System.out.println("Enter Information exactly in the following format:");
+    public static void getCarList() {
+        System.out.println("Enter Information exactly in the following format:");
         System.out.println("<Customer ID> / <Manufacturer> / <Branch>");
         ArrayList<String> args = getArgs();
-		try {
-			ResultSet rs = dbstate.executeQuery(String.format("SELECT C.vin, year(C.year), C.make, C.model, C.color, C.isNew, C.value FROM DealershipXCar D, Cars C, Customers P WHERE P.id=%s AND D.city='%s' AND D.company='%s' AND P.budget >= C.value AND C.vin=D.vin", args.get(0), args.get(2), args.get(1)));
-			ResultSetMetaData md = rs.getMetaData();
-			int columns = md.getColumnCount();
-    	 	while (rs.next()) {
-				for (int i = 1; i < columns + 1; i++) {
-					System.out.print(rs.getString(i) + " ");
-				}
-				System.out.println();
-        	}
-		}
-		catch(Exception e) {
-			System.out.println("Error finding affordable cars!");
-                        e.printStackTrace();
-		}
-	}
+        try {
+            ResultSet rs = dbstate.executeQuery(String.format("SELECT C.vin, C.year, C.make, C.model, C.color, C.isNew, C.value FROM DealershipXCar D, Cars C, Customers P WHERE P.id=%s AND D.city='%s' AND D.company='%s' AND P.budget >= C.value AND C.vin=D.vin", args.get(0), args.get(2), args.get(1)));
+            ResultSetMetaData md = rs.getMetaData();
+            int columns = md.getColumnCount();
+            while (rs.next()) {
+                for (int i = 1; i < columns + 1; i++) {
+                    if (i == 2) {
+                        SimpleDateFormat df  = new SimpleDateFormat("yyyy"); 
+                        System.out.print(df.format(rs.getDate(i)) + " ");
+                    } 
+                    else 
+                    {
+                        System.out.print(rs.getString(i) + " ");
+                    }
+
+                }
+                System.out.println();
+            }
+        } catch (Exception e) {
+            System.out.println("Error finding affordable cars!");
+            e.printStackTrace();
+        }
+    }
 
     public static void addManufacturer() {
         System.out.println("Enter Information exactly in the following format:");
@@ -527,7 +534,7 @@ public class Driver {
         System.out.println("Enter Information exactly in the following format:");
         System.out.println("<Dealership Manufacturer> / <Dealership City> / <VIN of the Car> / <Date of Sale> / <Customer ID>");
         ArrayList<String> args = getArgs();
-        
+
         try {
             dbstate.executeUpdate(String.format("DELETE FROM CustomerXCar (cid, vin) VALUES (%s, %s);", args.get(4), args.get(2)));
             dbstate.executeUpdate(String.format("INSERT INTO DealershipXCar VALUES (%s, %s, %s);", args.get(0), args.get(1), args.get(2)));
