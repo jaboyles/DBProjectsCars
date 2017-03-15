@@ -490,13 +490,13 @@ public class Driver {
         System.out.println("Enter Information exactly in the following format:");
         System.out.println("<Employee ID> / <VIN of Vehcile Sold> / <Sale Amount> / <Date of Sale> / <Customer ID>");
         ArrayList<String> args = getArgs();
-        execInsert(Sales, args);
         try {
+            execInsert(Sales, args);
             dbstate.executeUpdate(String.format("DELETE FROM DealershipXCar WHERE vin=%s;", args.get(1)));
             dbstate.executeUpdate(String.format("INSERT INTO CustomerXCar (cid, vin) VALUES (%s, %s);", args.get(4), args.get(1)));
             dbstate.executeUpdate(String.format("UPDATE Cars SET value=value*0.9, isNew=False, isSold=True WHERE vin=%s;", args.get(1)));
         } catch (Exception e) {
-            System.out.println("Error in sell method!!");
+            System.out.println("The customer either does not have enough money or is in the wrong location to purchase the car");
             e.printStackTrace();
         }
     }
@@ -511,7 +511,7 @@ public class Driver {
             dbstate.executeUpdate(String.format("INSERT INTO DealershipXCar VALUES (%s, %s, %s);", args.get(0), args.get(1), args.get(2)));
             dbstate.executeUpdate(String.format("UPDATE Cars SET isSold=False WHERE vin=%s;", args.get(2)));
         } catch (Exception e) {
-            System.out.println("Error in buy method!!");
+            System.out.println("The customer does not own the car");
         }
     }
 
