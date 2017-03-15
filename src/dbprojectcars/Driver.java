@@ -325,6 +325,7 @@ public class Driver {
         }
     }
 
+    
     public static void findBySale() {
         System.out.println("Please enter the VIN and Date of the sale in the following format:");
         System.out.println("<VIN> / <Date>");
