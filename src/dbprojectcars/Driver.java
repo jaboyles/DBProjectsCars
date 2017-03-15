@@ -27,7 +27,7 @@ public class Driver {
     static final int numcustvars = 3;
     static final int numdxcvars = 3;
     static final int numcxcvars = 2;
-    static final int numempvars = 4;
+    static final int numempvars = 5;
     static final int numsalvars = 4;
 
     public static void main(String[] args) {
