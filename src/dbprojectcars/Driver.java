@@ -157,23 +157,21 @@ public class Driver {
         System.out.println("Please enter the Employee ID:");
         empid = scan.nextInt();
         try {
-			ResultSet rs = dbstate.executeQuery("SELECT * FROM Sales WHERE emplid = " + empid);
+            ResultSet rs = dbstate.executeQuery("SELECT * FROM Sales WHERE emplid = " + empid);
             ResultSetMetaData md = rs.getMetaData();
             int columns = md.getColumnCount();
             while (rs.next()) {
                 for (int i = 1; i < columns + 1; i++) {
                     if (i == 4) {
                         System.out.print(rs.getDate(i) + " ");
-                    } 
-                    else 
-                    {
+                    } else {
                         System.out.print(rs.getString(i) + " ");
                     }
                 }
-          		System.out.println();
-          }
+                System.out.println();
+            }
         } catch (Exception e) {
-        	System.out.println("Error in getByEmpID");
+            System.out.println("Error in getByEmpID");
         }
     }
 
@@ -183,16 +181,23 @@ public class Driver {
         System.out.println("Please enter the vehicle VIN: ");
         vin = scan.nextInt();
         try {
-            dbstate = mycon.createStatement();
-            dbrs = dbstate.executeQuery("SELECT * FROM Sales WHERE vin = " + vin);
-            while (dbrs.next()) {
-                String name = dbrs.getString(1);
-                System.out.println(name);
+            ResultSet rs = dbstate.executeQuery("SELECT * FROM Sales WHERE vin = " + vin);
+            ResultSetMetaData md = rs.getMetaData();
+            int columns = md.getColumnCount();
+            while (rs.next()) {
+                for (int i = 1; i < columns + 1; i++) {
+                    if (i == 4) {
+                        System.out.print(rs.getDate(i) + " ");
+                    } else {
+                        System.out.print(rs.getString(i) + " ");
+                    }
+                }
+                System.out.println();
             }
         } catch (Exception e) {
             System.out.println("Error in getByVIN");
-            e.printStackTrace();
         }
+        
     }
 
     public static void getByDate() {
@@ -200,19 +205,24 @@ public class Driver {
         String date;
         System.out.println("Please enter the date in the following format: YYYY-MM-DD");
         date = scan.nextLine();
-
         try {
-            dbstate = mycon.createStatement();
-            dbrs = dbstate.executeQuery("SELECT * FROM Sales WHERE date = '" + date + "'");
-            //System.out.println("SELECT * FROM Sales WHERE date = '" + date + "'");
-            while (dbrs.next()) {
-                String name = dbrs.getString(1);
-                System.out.println(name);
+            ResultSet rs = dbstate.executeQuery("SELECT * FROM Sales WHERE date = '" + date + "'");
+            ResultSetMetaData md = rs.getMetaData();
+            int columns = md.getColumnCount();
+            while (rs.next()) {
+                for (int i = 1; i < columns + 1; i++) {
+                    if (i == 4) {
+                        System.out.print(rs.getDate(i) + " ");
+                    } else {
+                        System.out.print(rs.getString(i) + " ");
+                    }
+                }
+                System.out.println();
             }
         } catch (Exception e) {
             System.out.println("Error in getByDate");
-            e.printStackTrace();
         }
+        
     }
 
     public static void getByDealership() {
@@ -448,13 +458,12 @@ public class Driver {
         System.out.println("Enter Information exactly in the following format: If no customer specify Customer ID as 0");
         System.out.println("<Customer ID> / <Manufacturer> / <Branch>");
         ArrayList<String> args = getArgs();
-		String query = "";
-		if (args.get(0).equals("0")) {
-			query = String.format("SELECT C.vin, C.year, C.make, C.model, C.color, C.value FROM DealershipXCar D, Cars C WHERE D.city='%s' AND D.company='%s' AND C.vin=D.vin", args.get(2), args.get(1));
-		}
-		else {
-			query = String.format("SELECT C.vin, C.year, C.make, C.model, C.color, C.value FROM DealershipXCar D, Cars C, Customers P WHERE P.id=%s AND D.city='%s' AND D.company='%s' AND P.budget >= C.value AND C.vin=D.vin", args.get(0), args.get(2), args.get(1));
-		}
+        String query = "";
+        if (args.get(0).equals("0")) {
+            query = String.format("SELECT C.vin, C.year, C.make, C.model, C.color, C.value FROM DealershipXCar D, Cars C WHERE D.city='%s' AND D.company='%s' AND C.vin=D.vin", args.get(2), args.get(1));
+        } else {
+            query = String.format("SELECT C.vin, C.year, C.make, C.model, C.color, C.value FROM DealershipXCar D, Cars C, Customers P WHERE P.id=%s AND D.city='%s' AND D.company='%s' AND P.budget >= C.value AND C.vin=D.vin", args.get(0), args.get(2), args.get(1));
+        }
         try {
             ResultSet rs = dbstate.executeQuery(query);
             ResultSetMetaData md = rs.getMetaData();
@@ -462,11 +471,9 @@ public class Driver {
             while (rs.next()) {
                 for (int i = 1; i < columns + 1; i++) {
                     if (i == 2) {
-                        SimpleDateFormat df  = new SimpleDateFormat("yyyy"); 
+                        SimpleDateFormat df = new SimpleDateFormat("yyyy");
                         System.out.print(df.format(rs.getDate(i)) + " ");
-                    } 
-                    else 
-                    {
+                    } else {
                         System.out.print(rs.getString(i) + " ");
                     }
 
@@ -634,15 +641,12 @@ public class Driver {
             dbstate.executeUpdate(insertstr);
             dbstate = mycon.createStatement();
         } catch (Exception e) {
-            if (table == Sales)
-            {
+            if (table == Sales) {
                 System.out.println("The customer either does not have enough money or is in the wrong location to purchase the car");
-            }
-            else
-            {
+            } else {
                 System.out.println("Error in insertion");
             }
-            
+
             //e.printStackTrace();
         }
 
