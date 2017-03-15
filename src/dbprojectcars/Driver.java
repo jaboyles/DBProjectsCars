@@ -70,7 +70,7 @@ public class Driver {
                     getSales();
                     break;
                 case 10:
-                    //findEmployees();
+                    findEmployees();
                     break;
                 case 11:
                     System.exit(0);
@@ -213,8 +213,30 @@ public class Driver {
         city = scan.nextLine();
     }
 
-    public static void getSales() {
+	public static void findEmployees() {
+        printFindMenu();
         Scanner scan = new Scanner(System.in);
+        while (scan.hasNextLine()) {
+            int selection = 0;
+            try {
+                selection = scan.nextInt();
+            } catch (java.util.InputMismatchException e) {
+                scan.next();
+            }
+        	switch (selection) {
+            	case 1:
+					//option1
+          			break;
+            	default:
+					System.out.println();
+                	System.out.println("Invalid Entry...Try Again!");
+					break;
+			}
+			printFindMenu();
+        }
+    }
+
+    public static void getSales() {
         int opt = 0;
 
         opt = getSalesOpt();
@@ -250,6 +272,20 @@ public class Driver {
         System.out.println("=         3. Search for sales by Sale Date         =");
         System.out.println("=         4. Search for sales by Dealership        =");
         System.out.println("=         5. Search for sales by Manufacturerer    =");
+        System.out.println("=         6. Back to main menu                     =");
+        System.out.println("====================================================");
+    }
+
+	public static void printFindMenu() {
+        System.out.println();
+        System.out.println("EMPLOYEE FINDING MENU: Select Option...");
+        System.out.println("====================================================");
+        System.out.println("=  Options:                                        =");
+        System.out.println("=         1. Find Employee by ID                   =");
+        System.out.println("=         2. Find Employee by Name                 =");
+        System.out.println("=         3. Find Employees of Dealership Branch   =");
+        System.out.println("=         4. Find Employee by Sale                 =");
+        System.out.println("=         5. Find Employee by Position             =");
         System.out.println("=         6. Back to main menu                     =");
         System.out.println("====================================================");
     }
