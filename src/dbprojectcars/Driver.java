@@ -39,7 +39,7 @@ public class Driver {
             try {
                 selection = scan.nextInt();
             } catch (java.util.InputMismatchException e) {
-                scan.next();
+                scan.nextLine();
             }
             switch (selection) {
                 case 1:
