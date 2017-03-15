@@ -205,16 +205,13 @@ public class Driver {
     }
     
     public static void getByDealership() {
-        Scanner scan = new Scanner(System.in);
-        String company, city, myq;
-        System.out.println("Please enter the name of the dealership's company: ");
-        company = scan.nextLine();
-        System.out.println("Please enter the name of the dealership's city: ");
-        city = scan.nextLine();
+		System.out.println("Enter Information exactly in the following format:");
+        System.out.println("<Manufacturer> / <Location>");
+        ArrayList<String> args = getArgs();
         
         try {
-            myq = "SELECT S.* FROM Sales S, Employees E WHERE S.emplid = E.id AND E.company = '" 
-                    + company + "' AND E.city = '" + city + "'";
+            String myq = "SELECT S.* FROM Sales S, Employees E WHERE S.emplid = E.id AND E.company = '" 
+                    + args.get(0) + "' AND E.city = '" + args.get(1) + "'";
             dbstate = mycon.createStatement();
             dbrs = dbstate.executeQuery(myq);
             //System.out.println(myq);
