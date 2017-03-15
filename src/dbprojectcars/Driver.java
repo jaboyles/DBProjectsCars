@@ -102,7 +102,7 @@ public class Driver {
         System.out.println("=         8. Add Vehicle Model to Database         =");
         System.out.println("=         9. Get Sales                             =");
         System.out.println("=        10. Find Employee                         =");
-        System.out.println("=        11. Get Affordable Vehciles               =");
+        System.out.println("=        11. Find In Stock Vehicles                =");
         System.out.println("=        12. Quit                                  =");
         System.out.println("====================================================");
     }
@@ -438,11 +438,18 @@ public class Driver {
     }
 
     public static void getCarList() {
-        System.out.println("Enter Information exactly in the following format:");
+        System.out.println("Enter Information exactly in the following format: If no customer specify Customer ID as 0");
         System.out.println("<Customer ID> / <Manufacturer> / <Branch>");
         ArrayList<String> args = getArgs();
+		String query = "";
+		if (args.get(0).equals("0")) {
+			query = String.format("SELECT C.vin, C.year, C.make, C.model, C.color, C.isNew, C.value FROM DealershipXCar D, Cars C WHERE D.city='%s' AND D.company='%s' AND C.vin=D.vin", args.get(2), args.get(1));
+		}
+		else {
+			query = String.format("SELECT C.vin, C.year, C.make, C.model, C.color, C.isNew, C.value FROM DealershipXCar D, Cars C, Customers P WHERE P.id=%s AND D.city='%s' AND D.company='%s' AND P.budget >= C.value AND C.vin=D.vin", args.get(0), args.get(2), args.get(1))
+		}
         try {
-            ResultSet rs = dbstate.executeQuery(String.format("SELECT C.vin, C.year, C.make, C.model, C.color, C.isNew, C.value FROM DealershipXCar D, Cars C, Customers P WHERE P.id=%s AND D.city='%s' AND D.company='%s' AND P.budget >= C.value AND C.vin=D.vin", args.get(0), args.get(2), args.get(1)));
+            ResultSet rs = dbstate.executeQuery(query);
             ResultSetMetaData md = rs.getMetaData();
             int columns = md.getColumnCount();
             while (rs.next()) {
