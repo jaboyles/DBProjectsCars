@@ -72,7 +72,10 @@ public class Driver {
                 case 10:
                     findEmployees();
                     break;
-                case 11:
+				case 11:
+					getCarList();
+					break;
+                case 12:
                     System.exit(0);
                     break;
                 default:
@@ -99,7 +102,8 @@ public class Driver {
         System.out.println("=         8. Add Vehicle Model to Database         =");
         System.out.println("=         9. Get Sales                             =");
         System.out.println("=        10. Find Employee                         =");
-        System.out.println("=        11. Quit                                  =");
+        System.out.println("=        11. Get Affordable Vehciles               =");
+        System.out.println("=        12. Quit                                  =");
         System.out.println("====================================================");
     }
 
@@ -321,10 +325,7 @@ public class Driver {
             e.printStackTrace();
         }
     }
-
-    
-    
-    
+ 
     public static void findBySale() {
         System.out.println("Please enter the VIN and Date of the sale in the following format:");
         System.out.println("<VIN> / <Date>");
@@ -436,6 +437,26 @@ public class Driver {
         System.out.println("====================================================");
     }
 
+	public static void getCarList() {
+		System.out.println("Enter Information exactly in the following format:");
+        System.out.println("<Customer ID> / <Manufacturer> / <Branch>");
+        ArrayList<String> args = getArgs();
+		try {
+			ResultSet rs = dbstate.executeQuery(String.format("SELECT vin, year, make, model, color, isNew, price FROM DealershipXCar D, Cars C, Customers P WHERE P.id=%s AND D.city=%s AND D.company=%s AND P.budget >= C.value AND C.vin=D.vin", args.get(0), args.get(2), args.get(1)));
+			ResultSetMetaData md = rs.getMetaData();
+			int columns = md.getColumnCount();
+    	 	while (rs.next()) {
+				for (int i = 0; i < columns; i++) {
+					System.out.println(rs.getString(i) + " ");
+				}
+				System.out.println();
+        	}
+		}
+		catch(Exception e) {
+			System.out.println("Error finding affordable cars!");
+		}
+	}
+
     public static void addManufacturer() {
         System.out.println("Enter Information exactly in the following format:");
         System.out.println("<Manufacturer Name>");
@@ -459,7 +480,7 @@ public class Driver {
 
     public static void addEmployee() {
         System.out.println("Enter Information exactly in the following format:");
-        System.out.println("<Name> / <Dealership Company> /<Dealership Location> / <Position>");
+        System.out.println("<Name> / <Manufacturer> /<Dealership Location> / <Position>");
         ArrayList<String> args = getArgs();
         execInsert(Employees, args);
     }
