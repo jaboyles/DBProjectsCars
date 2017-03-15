@@ -61,7 +61,7 @@ public class Driver {
                     sell();
                     break;
                 case 7:
-                    //buy();
+                    buy();
                     break;
                 case 8:
                     addModel();
