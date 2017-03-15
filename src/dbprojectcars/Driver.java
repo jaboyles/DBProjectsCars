@@ -446,7 +446,7 @@ public class Driver {
 			query = String.format("SELECT C.vin, C.year, C.make, C.model, C.color, C.isNew, C.value FROM DealershipXCar D, Cars C WHERE D.city='%s' AND D.company='%s' AND C.vin=D.vin", args.get(2), args.get(1));
 		}
 		else {
-			query = String.format("SELECT C.vin, C.year, C.make, C.model, C.color, C.isNew, C.value FROM DealershipXCar D, Cars C, Customers P WHERE P.id=%s AND D.city='%s' AND D.company='%s' AND P.budget >= C.value AND C.vin=D.vin", args.get(0), args.get(2), args.get(1))
+			query = String.format("SELECT C.vin, C.year, C.make, C.model, C.color, C.isNew, C.value FROM DealershipXCar D, Cars C, Customers P WHERE P.id=%s AND D.city='%s' AND D.company='%s' AND P.budget >= C.value AND C.vin=D.vin", args.get(0), args.get(2), args.get(1));
 		}
         try {
             ResultSet rs = dbstate.executeQuery(query);
