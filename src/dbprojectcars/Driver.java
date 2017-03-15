@@ -30,7 +30,7 @@ public class Driver {
     static final int numsalvars = 3;
 
     public static void main(String[] args) {
-        connectDB();
+        //connectDB();
         printMenu();
         Scanner scan = new Scanner(System.in);
         while (scan.hasNextLine()) {
@@ -66,15 +66,12 @@ public class Driver {
                     addModel();
                     break;
                 case 9:
-                    //getSalesEmployee();
+                    getSales();
                     break;
                 case 10:
-                    //getSalesBranch();
+                    //findEmployees();
                     break;
                 case 11:
-                    //findEmployee();
-                    break;
-                case 12:
                     System.exit(0);
                     break;
                 default:
@@ -99,10 +96,9 @@ public class Driver {
         System.out.println("=         6. Report Sale                           =");
         System.out.println("=         7. Report Buy Back                       =");
         System.out.println("=         8. Add Vehicle Model to Database         =");
-        System.out.println("=         9. Get Sales by Employee                 =");
-        System.out.println("=        10. Get Sales by Branch                   =");
-        System.out.println("=        11. Find Employee                         =");
-        System.out.println("=        12. Quit                                  =");
+        System.out.println("=         9. Get Sales                             =");
+        System.out.println("=        10. Find Employee                         =");
+        System.out.println("=        11. Quit                                  =");
         System.out.println("====================================================");
     }
 
@@ -127,6 +123,134 @@ public class Driver {
         }
         args.add(field);
         return args;
+    }
+
+    public static int getSalesOpt() {
+        Scanner scan = new Scanner(System.in);
+        int opt = 0;
+        while (opt == 0) {
+            //opt = scan.nextInt();
+            printSalesMenu();
+            try {
+                opt = scan.nextInt();
+            } catch (java.util.InputMismatchException e) {
+                scan.next();
+            }
+            if (opt > 0 && opt <= 6) {
+                return opt;
+            } else {
+                System.out.println("Invalid option, please enter a valid option");
+                opt = 0;
+            }
+        }
+        return 0;
+    }
+
+    public static void getByEmpID() {
+        Scanner scan = new Scanner(System.in);
+        int empid;
+        System.out.println("Please enter the Employee ID:");
+        empid = scan.nextInt();
+        try {
+            dbstate = mycon.createStatement();
+            dbrs = dbstate.executeQuery("SELECT * FROM Sales WHERE emplid = " + empid);
+            //System.out.println("SELECT * FROM Sales WHERE emplid = " + empid);
+            while (dbrs.next()) {
+                String name = dbrs.getString(1);
+                System.out.println(name);
+            }
+        } catch (Exception e) {
+            System.out.println("Error in getByEmpID");
+            e.printStackTrace();
+        }
+    }
+
+    public static void getByVIN() {
+        Scanner scan = new Scanner(System.in);
+        int vin;
+        System.out.println("Please enter the vehicle VIN: ");
+        vin = scan.nextInt();
+        try {
+            dbstate = mycon.createStatement();
+            dbrs = dbstate.executeQuery("SELECT * FROM Sales WHERE vin = " + vin);
+            while (dbrs.next()) {
+                String name = dbrs.getString(1);
+                System.out.println(name);
+            }
+        } catch (Exception e) {
+            System.out.println("Error in getByEmpID");
+            e.printStackTrace();
+        }
+    }
+
+    public static void getByDate() {
+        Scanner scan = new Scanner(System.in);
+        String date;
+        System.out.println("Please enter the date in the following format: YYYY-MM-DD");
+        date = scan.nextLine();
+
+        try {
+            dbstate = mycon.createStatement();
+            dbrs = dbstate.executeQuery("SELECT * FROM Sales WHERE date = '" + date + "'");
+            //System.out.println("SELECT * FROM Sales WHERE date = '" + date + "'");
+            while (dbrs.next()) {
+                String name = dbrs.getString(1);
+                System.out.println(name);
+            }
+        } catch (Exception e) {
+            System.out.println("Error in getByEmpID");
+            e.printStackTrace();
+        }
+    }
+    
+    public static void getByDealership() {
+        Scanner scan = new Scanner(System.in);
+        String company, city;
+        System.out.println("Please enter the name of the dealership's company: ");
+        company = scan.nextLine();
+        System.out.println("Please enter the name of the dealership's city: ");
+        city = scan.nextLine();
+    }
+
+    public static void getSales() {
+        Scanner scan = new Scanner(System.in);
+        int opt = 0;
+
+        opt = getSalesOpt();
+        switch (opt) {
+            case 1:
+                getByEmpID();
+                return;
+            case 2:
+                getByVIN();
+                return;
+            case 3:
+                getByDate();
+                return;
+            case 4:
+                //get by dealership
+                return;
+            case 5:
+                //get by manufacturer
+                return;
+            case 6:
+                return;
+        }
+
+    }
+
+    public static void printSalesMenu() {
+        System.out.println();
+        System.out.println("SALES MENU: Select Option...");
+        System.out.println("====================================================");
+        System.out.println("=  Options:                                        =");
+        System.out.println("=         1. Search for sales by Employee ID       =");
+        System.out.println("=         2. Search for sales by Vehicle VIN       =");
+        System.out.println("=         3. Search for sales by Sale Date         =");
+        System.out.println("=         4. Search for sales by Dealership        =");
+        System.out.println("=         5. Search for sales by Manufacturerer    =");
+        System.out.println("=         6. Back to main menu                     =");
+        System.out.println("====================================================");
     }
 
     public static void addManufacturer() {
@@ -223,20 +347,18 @@ public class Driver {
 
         for (i = 0; i < maxarr; i++) {
             boolean isString = false;
-			try {
-				Double.parseDouble(values.get(i));
-			}
-			catch (NumberFormatException e) {
-				isString = true;
-			}
+            try {
+                Double.parseDouble(values.get(i));
+            } catch (NumberFormatException e) {
+                isString = true;
+            }
 
-			if (isString == true) {
-				insertstr = insertstr + "'" + values.get(i) + "'";
-			}
-			else {
-				insertstr += values.get(i);
-			}
-            
+            if (isString == true) {
+                insertstr = insertstr + "'" + values.get(i) + "'";
+            } else {
+                insertstr += values.get(i);
+            }
+
             if (i != maxarr - 1) {
                 insertstr += ", ";
             }
