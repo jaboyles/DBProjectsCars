@@ -39,7 +39,7 @@ public class Driver {
             try {
                 selection = scan.nextInt();
             } catch (java.util.InputMismatchException e) {
-                scan.nextLine();
+                scan.next();
             }
             switch (selection) {
                 case 1:
@@ -157,16 +157,23 @@ public class Driver {
         System.out.println("Please enter the Employee ID:");
         empid = scan.nextInt();
         try {
-            dbstate = mycon.createStatement();
-            dbrs = dbstate.executeQuery("SELECT * FROM Sales WHERE emplid = " + empid);
-            //System.out.println("SELECT * FROM Sales WHERE emplid = " + empid);
-            while (dbrs.next()) {
-                String name = dbrs.getString(1);
-                System.out.println(name);
-            }
+			ResultSet rs = dbstate.executeQuery("SELECT * FROM Sales WHERE emplid = " + empid);
+            ResultSetMetaData md = rs.getMetaData();
+            int columns = md.getColumnCount();
+            while (rs.next()) {
+                for (int i = 1; i < columns + 1; i++) {
+                    if (i == 4) {
+                        System.out.print(rs.getDate(i) + " ");
+                    } 
+                    else 
+                    {
+                        System.out.print(rs.getString(i) + " ");
+                    }
+                }
+          		System.out.println();
+          }
         } catch (Exception e) {
-            System.out.println("Error in getByEmpID");
-            e.printStackTrace();
+        	System.out.println("Error in getByEmpID");
         }
     }
 
