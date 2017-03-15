@@ -31,7 +31,7 @@ public class Driver {
     static final int numsalvars = 5;
 
     public static void main(String[] args) {
-        //connectDB();
+        connectDB();
         printMenu();
         Scanner scan = new Scanner(System.in);
         while (scan.hasNextLine()) {
@@ -205,16 +205,13 @@ public class Driver {
     }
 
     public static void getByDealership() {
-        Scanner scan = new Scanner(System.in);
-        String company, city, myq;
-        System.out.println("Please enter the name of the dealership's company: ");
-        company = scan.nextLine();
-        System.out.println("Please enter the name of the dealership's city: ");
-        city = scan.nextLine();
-
+		System.out.println("Enter Information exactly in the following format:");
+        System.out.println("<Manufacturer> / <Location>");
+        ArrayList<String> args = getArgs();
+        
         try {
-            myq = "SELECT S.* FROM Sales S, Employees E WHERE S.emplid = E.id AND E.company = '"
-                    + company + "' AND E.city = '" + city + "'";
+            String myq = "SELECT S.* FROM Sales S, Employees E WHERE S.emplid = E.id AND E.company = '" 
+                    + args.get(0) + "' AND E.city = '" + args.get(1) + "'";
             dbstate = mycon.createStatement();
             dbrs = dbstate.executeQuery(myq);
             //System.out.println(myq);
@@ -483,7 +480,7 @@ public class Driver {
         try {
             dbstate.executeUpdate(String.format("DELETE FROM DealershipXCar WHERE vin=%s;", args.get(1)));
             dbstate.executeUpdate(String.format("INSERT INTO CustomerXCar (cid, vin) VALUES (%s, %s);", args.get(4), args.get(1)));
-            dbstate.executeUpdate(String.format("UPDATE Cars SET value=value*0.9 WHERE vin=%s;", args.get(1)));
+            dbstate.executeUpdate(String.format("UPDATE Cars SET value=value*0.9, isNew=False, isSold=True WHERE vin=%s;", args.get(1)));
         } catch (Exception e) {
             System.out.println("Error in sell method!!");
             e.printStackTrace();
