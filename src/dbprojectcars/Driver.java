@@ -31,7 +31,7 @@ public class Driver {
     static final int numsalvars = 5;
 
     public static void main(String[] args) {
-        //connectDB();
+        connectDB();
         printMenu();
         Scanner scan = new Scanner(System.in);
         while (scan.hasNextLine()) {
@@ -312,7 +312,7 @@ public class Driver {
         try {
             dbstate.executeUpdate(String.format("DELETE FROM DealershipXCar WHERE vin=%s;", args.get(1)));
             dbstate.executeUpdate(String.format("INSERT INTO CustomerXCar (cid, vin) VALUES (%s, %s);", args.get(4), args.get(1)));
-            dbstate.executeUpdate(String.format("UPDATE Cars SET value=value*0.9 WHERE vin=%s;", args.get(1)));
+            dbstate.executeUpdate(String.format("UPDATE Cars SET value=value*0.9, isNew=False, isSold=True WHERE vin=%s;", args.get(1)));
         } catch (Exception e) {
             System.out.println("Error in sell method!!");
             e.printStackTrace();
