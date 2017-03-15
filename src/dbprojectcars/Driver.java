@@ -61,7 +61,7 @@ public class Driver {
                     sell();
                     break;
                 case 7:
-                    //buy();
+                    buy();
                     break;
                 case 8:
                     addModel();
@@ -70,7 +70,7 @@ public class Driver {
                     getSales();
                     break;
                 case 10:
-                    //findEmployees();
+                    findEmployees();
                     break;
                 case 11:
                     System.exit(0);
@@ -179,7 +179,7 @@ public class Driver {
                 System.out.println(name);
             }
         } catch (Exception e) {
-            System.out.println("Error in getByEmpID");
+            System.out.println("Error in getByVIN");
             e.printStackTrace();
         }
     }
@@ -199,22 +199,80 @@ public class Driver {
                 System.out.println(name);
             }
         } catch (Exception e) {
-            System.out.println("Error in getByEmpID");
+            System.out.println("Error in getByDate");
             e.printStackTrace();
         }
     }
     
     public static void getByDealership() {
         Scanner scan = new Scanner(System.in);
-        String company, city;
+        String company, city, myq;
         System.out.println("Please enter the name of the dealership's company: ");
         company = scan.nextLine();
         System.out.println("Please enter the name of the dealership's city: ");
         city = scan.nextLine();
+        
+        try {
+            myq = "SELECT S.* FROM Sales S, Employees E WHERE S.emplid = E.id AND E.company = '" 
+                    + company + "' AND E.city = '" + city + "'";
+            dbstate = mycon.createStatement();
+            dbrs = dbstate.executeQuery(myq);
+            //System.out.println(myq);
+            while (dbrs.next()) {
+                String name = dbrs.getString(1);
+                System.out.println(name);
+            }
+        } catch (Exception e) {
+            System.out.println("Error in getByDealership");
+            e.printStackTrace();
+        }
+    }
+    
+    public static void getByCompany() {
+        Scanner scan = new Scanner(System.in);
+        String company, myq;
+        System.out.println("Please enter the name of the company: ");
+        company = scan.nextLine();   
+        try {
+            myq = "SELECT S.* FROM Sales S, Employees E WHERE S.emplid = E.id AND E.company = '" 
+                    + company + "'";
+            dbstate = mycon.createStatement();
+            dbrs = dbstate.executeQuery(myq);
+            //System.out.println(myq);
+            while (dbrs.next()) {
+                String name = dbrs.getString(1);
+                System.out.println(name);
+            }
+        } catch (Exception e) {
+            System.out.println("Error in getByCompany");
+            e.printStackTrace();
+        }
+    }
+
+	public static void findEmployees() {
+        printFindMenu();
+        Scanner scan = new Scanner(System.in);
+        while (scan.hasNextLine()) {
+            int selection = 0;
+            try {
+                selection = scan.nextInt();
+            } catch (java.util.InputMismatchException e) {
+                scan.next();
+            }
+        	switch (selection) {
+            	case 1:
+					//option1
+          			break;
+            	default:
+					System.out.println();
+                	System.out.println("Invalid Entry...Try Again!");
+					break;
+			}
+			printFindMenu();
+        }
     }
 
     public static void getSales() {
-        Scanner scan = new Scanner(System.in);
         int opt = 0;
 
         opt = getSalesOpt();
@@ -229,10 +287,10 @@ public class Driver {
                 getByDate();
                 return;
             case 4:
-                //get by dealership
+                getByDealership();
                 return;
             case 5:
-                //get by manufacturer
+                getByCompany();
                 return;
             case 6:
                 return;
@@ -249,7 +307,21 @@ public class Driver {
         System.out.println("=         2. Search for sales by Vehicle VIN       =");
         System.out.println("=         3. Search for sales by Sale Date         =");
         System.out.println("=         4. Search for sales by Dealership        =");
-        System.out.println("=         5. Search for sales by Manufacturerer    =");
+        System.out.println("=         5. Search for sales by Company           =");
+        System.out.println("=         6. Back to main menu                     =");
+        System.out.println("====================================================");
+    }
+
+	public static void printFindMenu() {
+        System.out.println();
+        System.out.println("EMPLOYEE FINDING MENU: Select Option...");
+        System.out.println("====================================================");
+        System.out.println("=  Options:                                        =");
+        System.out.println("=         1. Find Employee by ID                   =");
+        System.out.println("=         2. Find Employee by Name                 =");
+        System.out.println("=         3. Find Employees of Dealership Branch   =");
+        System.out.println("=         4. Find Employee by Sale                 =");
+        System.out.println("=         5. Find Employee by Position             =");
         System.out.println("=         6. Back to main menu                     =");
         System.out.println("====================================================");
     }
