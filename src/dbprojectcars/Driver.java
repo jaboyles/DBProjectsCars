@@ -273,17 +273,21 @@ public class Driver {
         System.out.println("Please enter the ID of the Employee you would like to find:");
         empid = scan.nextInt();
         try {
-            dbstate = mycon.createStatement();
-            dbrs = dbstate.executeQuery("SELECT * FROM Employees WHERE id = " + empid);
-            //System.out.println(myq);
-            while (dbrs.next()) {
-                String name = dbrs.getString(1);
-                System.out.println(name);
+            ResultSet rs = dbstate.executeQuery("SELECT * FROM Employees WHERE id = " + empid);
+            ResultSetMetaData md = rs.getMetaData();
+            int columns = md.getColumnCount();
+            while (rs.next()) {
+                for (int i = 1; i < columns + 1; i++) {
+                    
+                    System.out.print(rs.getString(i) + " ");
+                    
+                }
+                System.out.println();
             }
         } catch (Exception e) {
             System.out.println("Error in findByID");
-            e.printStackTrace();
         }
+       
     }
 
     public static void findByName() {
@@ -292,16 +296,19 @@ public class Driver {
         System.out.println("Please enter the name of the Employee you would like to find:");
         ename = scan.nextLine();
         try {
-            dbstate = mycon.createStatement();
-            dbrs = dbstate.executeQuery("SELECT * FROM Employees WHERE name = '" + ename + "'");
-            //System.out.println(myq);
-            while (dbrs.next()) {
-                String name = dbrs.getString(1);
-                System.out.println(name);
+            ResultSet rs = dbstate.executeQuery("SELECT * FROM Employees WHERE name = '" + ename + "'");
+            ResultSetMetaData md = rs.getMetaData();
+            int columns = md.getColumnCount();
+            while (rs.next()) {
+                for (int i = 1; i < columns + 1; i++) {
+                    
+                    System.out.print(rs.getString(i) + " ");
+                    
+                }
+                System.out.println();
             }
         } catch (Exception e) {
             System.out.println("Error in findByName");
-            e.printStackTrace();
         }
     }
 
@@ -310,18 +317,22 @@ public class Driver {
         System.out.println("<Company> / <City>");
         ArrayList<String> args = getArgs();
         try {
-            dbstate = mycon.createStatement();
-            dbrs = dbstate.executeQuery("SELECT * FROM Employees WHERE company = '"
+            ResultSet rs = dbstate.executeQuery("SELECT * FROM Employees WHERE company = '"
                     + args.get(0) + "' AND city = '" + args.get(1) + "'");
-            //System.out.println(myq);
-            while (dbrs.next()) {
-                String name = dbrs.getString(1);
-                System.out.println(name);
+            ResultSetMetaData md = rs.getMetaData();
+            int columns = md.getColumnCount();
+            while (rs.next()) {
+                for (int i = 1; i < columns + 1; i++) {
+                    
+                    System.out.print(rs.getString(i) + " ");
+                    
+                }
+                System.out.println();
             }
         } catch (Exception e) {
             System.out.println("Error in findByDealership");
-            e.printStackTrace();
         }
+        
     }
 
     public static void findByPosition() {
@@ -329,18 +340,22 @@ public class Driver {
         System.out.println("<Company> / <City> / <Position>");
         ArrayList<String> args = getArgs();
         try {
-            dbstate = mycon.createStatement();
-            dbrs = dbstate.executeQuery("SELECT * FROM Employees WHERE company = '"
+            ResultSet rs = dbstate.executeQuery("SELECT * FROM Employees WHERE company = '"
                     + args.get(0) + "' AND city = '" + args.get(1) + "' AND position = '" + args.get(2) + "'");
-            //System.out.println(myq);
-            while (dbrs.next()) {
-                String name = dbrs.getString(1);
-                System.out.println(name);
+            ResultSetMetaData md = rs.getMetaData();
+            int columns = md.getColumnCount();
+            while (rs.next()) {
+                for (int i = 1; i < columns + 1; i++) {
+                    
+                    System.out.print(rs.getString(i) + " ");
+                    
+                }
+                System.out.println();
             }
         } catch (Exception e) {
             System.out.println("Error in findByPosition");
-            e.printStackTrace();
         }
+        
     }
 
     public static void findBySale() {
@@ -349,18 +364,22 @@ public class Driver {
         System.out.println("Date format: YYYY-MM-DD");
         ArrayList<String> args = getArgs();
         try {
-            dbstate = mycon.createStatement();
-            dbrs = dbstate.executeQuery("SELECT E.* FROM Employees E, Sales S WHERE E.id = S.emplid AND S.vin = "
+            ResultSet rs = dbstate.executeQuery("SELECT E.* FROM Employees E, Sales S WHERE E.id = S.emplid AND S.vin = "
                     + args.get(0) + " AND S.date = '" + args.get(1) + "'");
-            //System.out.println(myq);
-            while (dbrs.next()) {
-                String name = dbrs.getString(1);
-                System.out.println(name);
+            ResultSetMetaData md = rs.getMetaData();
+            int columns = md.getColumnCount();
+            while (rs.next()) {
+                for (int i = 1; i < columns + 1; i++) {
+                    
+                    System.out.print(rs.getString(i) + " ");
+                    
+                }
+                System.out.println();
             }
         } catch (Exception e) {
             System.out.println("Error in findBySale");
-            e.printStackTrace();
         }
+        
     }
 
     public static void findEmployees() {
