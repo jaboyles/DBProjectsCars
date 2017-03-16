@@ -23,7 +23,7 @@ public class Driver {
     static final int numcompvars = 1;
     static final int numdealvars = 2;
     static final int nummodvars = 4;
-    static final int numcarvars = 6;
+    static final int numcarvars = 5;
     static final int numcustvars = 3;
     static final int numdxcvars = 3;
     static final int numcxcvars = 2;
@@ -526,14 +526,14 @@ public class Driver {
 
     public static void addVehicle() {
         System.out.println("Enter Information exactly in the following format:");
-        System.out.println("<VIN> / <value> / <color> / <Manufacturer> / <model> / <year>");
+        System.out.println("<value> / <color> / <Manufacturer> / <model> / <year>");
         ArrayList<String> args = getArgs();
         execInsert(Cars, args);
     }
 
     public static void addEmployee() {
         System.out.println("Enter Information exactly in the following format:");
-        System.out.println("<Name> / <Manufacturer> /<Dealership Location> / <Position>");
+        System.out.println("<Name> / <Manufacturer> / <Dealership Location> / <Position>");
         ArrayList<String> args = getArgs();
         execInsert(Employees, args);
     }
@@ -570,8 +570,8 @@ public class Driver {
             dbstate.executeUpdate(String.format("INSERT INTO CustomerXCar (cid, vin) VALUES (%s, %s);", args.get(4), args.get(1)));
             dbstate.executeUpdate(String.format("UPDATE Cars SET value=value*0.9, isNew=False, isSold=True WHERE vin=%s;", args.get(1)));
         } catch (Exception e) {
-            System.out.println("The customer either does not have enough money or is in the wrong location to purchase the car");
-            e.printStackTrace();
+            //System.out.println("The customer either does not have enough money or is in the wrong location to purchase the car");
+            //e.printStackTrace();
         }
     }
 
@@ -611,7 +611,7 @@ public class Driver {
                 maxarr = nummodvars;
                 break;
             case Cars:
-                insertstr = "INSERT INTO Cars VALUES (";
+                insertstr = "INSERT INTO Cars(value, color, make, model) VALUES (";
                 maxarr = numcarvars;
                 break;
             case Customers:
@@ -627,7 +627,7 @@ public class Driver {
                 maxarr = numcxcvars;
                 break;
             case Employees:
-                insertstr = "INSERT INTO Employees VALUES(";
+                insertstr = "INSERT INTO Employees(name, company, city, position) VALUES(";
                 maxarr = numempvars;
                 break;
             case Sales:
