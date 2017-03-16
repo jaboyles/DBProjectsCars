@@ -222,27 +222,29 @@ public class Driver {
         } catch (Exception e) {
             System.out.println("Error in getByDate");
         }
-        
     }
 
     public static void getByDealership() {
         System.out.println("Enter Information exactly in the following format:");
         System.out.println("<Manufacturer> / <Location>");
         ArrayList<String> args = getArgs();
-
-        try {
-            String myq = "SELECT S.* FROM Sales S, Employees E WHERE S.emplid = E.id AND E.company = '"
-                    + args.get(0) + "' AND E.city = '" + args.get(1) + "'";
-            dbstate = mycon.createStatement();
-            dbrs = dbstate.executeQuery(myq);
-            //System.out.println(myq);
-            while (dbrs.next()) {
-                String name = dbrs.getString(1);
-                System.out.println(name);
+		try {
+            ResultSet rs = dbstate.executeQuery("SELECT S.* FROM Sales S, Employees E WHERE S.emplid = E.id AND E.company = '"
+                    + args.get(0) + "' AND E.city = '" + args.get(1) + "'");
+            ResultSetMetaData md = rs.getMetaData();
+            int columns = md.getColumnCount();
+            while (rs.next()) {
+                for (int i = 1; i < columns + 1; i++) {
+                    if (i == 4) {
+                        System.out.print(rs.getDate(i) + " ");
+                    } else {
+                        System.out.print(rs.getString(i) + " ");
+                    }
+                }
+                System.out.println();
             }
         } catch (Exception e) {
             System.out.println("Error in getByDealership");
-            e.printStackTrace();
         }
     }
 
@@ -250,20 +252,23 @@ public class Driver {
         Scanner scan = new Scanner(System.in);
         String company, myq;
         System.out.println("Please enter the name of the company: ");
-        company = scan.nextLine();
-        try {
-            myq = "SELECT S.* FROM Sales S, Employees E WHERE S.emplid = E.id AND E.company = '"
-                    + company + "'";
-            dbstate = mycon.createStatement();
-            dbrs = dbstate.executeQuery(myq);
-            //System.out.println(myq);
-            while (dbrs.next()) {
-                String name = dbrs.getString(1);
-                System.out.println(name);
+        company = scan.nextLine();		
+		try {
+            ResultSet rs = dbstate.executeQuery("SELECT S.* FROM Sales S, Employees E WHERE S.emplid = E.id AND E.company = '" + company + "'");
+            ResultSetMetaData md = rs.getMetaData();
+            int columns = md.getColumnCount();
+            while (rs.next()) {
+                for (int i = 1; i < columns + 1; i++) {
+                    if (i == 4) {
+                        System.out.print(rs.getDate(i) + " ");
+                    } else {
+                        System.out.print(rs.getString(i) + " ");
+                    }
+                }
+                System.out.println();
             }
         } catch (Exception e) {
             System.out.println("Error in getByCompany");
-            e.printStackTrace();
         }
     }
 
